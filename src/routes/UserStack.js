@@ -6,6 +6,7 @@ import { theme } from '../core/theme';
 import Chat from '../pages/Chat';
 import Explore from '../pages/Explore';
 import Message from '../pages/Message';
+import Profile from '../pages/Profile';
 import Settings from '../pages/Settings';
 
 const Stack = createStackNavigator();
@@ -18,13 +19,29 @@ const screenOptionStyle = {
   headerBackTitle: theme.colors.black,
 };
 
-
-
 const ChatStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name="Chat" component={Chat} />
       <Stack.Screen name="Message" component={Message} />
+    </Stack.Navigator>
+  );
+}
+
+const ExploreStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptionStyle}>
+      <Stack.Screen name="Explore" component={Explore} />
+      <Stack.Screen name="Profile" component={Profile} />
+    </Stack.Navigator>
+  );
+}
+
+
+const SettingsStackNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={screenOptionStyle}>
+      <Stack.Screen name="Settings" component={Settings} />
     </Stack.Navigator>
   );
 }
@@ -36,7 +53,6 @@ const UserStack = () => {
     <Tab.Navigator
       initialRouteName="Explore"
       activeColor={theme.colors.white}
-      // inactiveColor="#3e2465"
       barStyle={{ backgroundColor: theme.colors.primary }}
       tabBarOptions={{
         labelStyle: {
@@ -47,7 +63,7 @@ const UserStack = () => {
         },
       }}
     >
-      <Tab.Screen name="Explore" component={Explore}
+      <Tab.Screen name="Explore" component={ExploreStackNavigator}
         options={{
           tabBarLabel: 'Explore',
           tabBarIcon: ({ color }) => (
@@ -63,7 +79,7 @@ const UserStack = () => {
           ),
         }} />
 
-      <Tab.Screen name="Settings" component={Settings}
+      <Tab.Screen name="Settings" component={SettingsStackNavigator}
         options={{
           tabBarLabel: 'Settings',
           tabBarIcon: ({ color }) => (

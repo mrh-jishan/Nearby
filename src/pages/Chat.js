@@ -28,7 +28,7 @@ const data = [
         message: "Someone like you. Someone who'll rattle the cages.",
         image: require('../assets/logo.png')
     },
-    
+
 ]
 
 const Chat = ({ navigation }) => {
@@ -40,12 +40,19 @@ const Chat = ({ navigation }) => {
             <View style={styles.containerMessages}>
                 <FlatList
                     data={data}
-                    ListHeaderComponent={() => (<View style={styles.top}>
-                        <Text style={styles.title}>Messages</Text>
-                    </View>)}
+                    ListHeaderComponent={() => (
+                        <View style={styles.top}>
+                            <View>
+                                <Text style={styles.title}>Messages</Text>
+                            </View>
+                            <View style={styles.separator} />
+                        </View>
+                    )}
+                    ItemSeparatorComponent={({ index }) => <View key={index} style={styles.separator} />}
+                    SectionSeparatorComponent={({ index }) => <View key={index} style={styles.separator} />}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => (
-                        <TouchableOpacity onPress={()=> navigation.navigate('Message')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Message')}>
                             <Avatar
                                 image={item.image}
                                 name={item.name}
@@ -73,21 +80,26 @@ const styles = StyleSheet.create({
         height: DIMENSION_HEIGHT
     },
     top: {
-        paddingTop: 50,
+        paddingTop: 10,
         marginHorizontal: 10,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center"
+        flexDirection: "column",
+        alignItems: "flex-start",
     },
     title: {
         paddingBottom: 10,
         fontSize: 22,
-        color: theme.colors.dark_gray
+        color: theme.colors.dark_gray,
+
     },
     icon: {
         fontSize: 20,
         color: theme.colors.dark_gray,
         paddingRight: 10
+    },
+    separator: {
+        height: 0.8,
+        width: "100%",
+        backgroundColor: "#c9c9c9"
     },
 })
 

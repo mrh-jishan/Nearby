@@ -38,10 +38,10 @@ const Explore = ({ navigation }) => {
         onSwipedRight={() => onSwiped('right')}
         onSwipedTop={() => onSwiped('top')}
         onSwipedBottom={() => onSwiped('bottom')}
-        onTapCard={swipeLeft}
+        onTapCard={()=> navigation.navigate('Profile')}
         cards={data.cards}
         cardIndex={data.cardIndex}
-        cardVerticalMargin={10}
+        cardVerticalMargin={8}
         cardHorizontalMargin={10}
         renderCard={CardItem}
         onSwipedAll={onSwipedAllCards}
