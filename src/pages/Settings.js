@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import auth from '@react-native-firebase/auth';
+import React from 'react';
 import { SectionList, StyleSheet, Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
 import ListItem from './../components/ListItem';
@@ -10,24 +11,24 @@ const data = [
         data: [
             {
                 name: 'Profile',
-                page: 'MyProfile',
+                page: 'UserProfile',
                 icon: 'user'
             },
-            {
-                name: 'Edit Profile',
-                page: 'EditProfile',
-                icon: 'edit'
-            },
-            {
-                name: 'eWallet',
-                page: 'Wallet',
-                icon: 'usd'
-            },
-            {
-                name: 'Change Password',
-                page: 'ChangePassword',
-                icon: 'unlock'
-            },
+            // {
+            //     name: 'Edit Profile',
+            //     page: 'EditProfile',
+            //     icon: 'edit'
+            // },
+            // {
+            //     name: 'eWallet',
+            //     page: 'Wallet',
+            //     icon: 'usd'
+            // },
+            // {
+            //     name: 'Change Password',
+            //     page: 'ChangePassword',
+            //     icon: 'unlock'
+            // },
             {
                 name: 'Delete my account',
                 page: 'DeleteAccount',
@@ -57,30 +58,40 @@ const data = [
                 name: 'App info',
                 page: 'AppInfo',
                 icon: 'info'
-            }]
+            }
+        ]
     },
 ]
 
-const Settings = () => {
+const signout = () => {
+    auth()
+        .signOut()
+        .then(() => console.log('User signed out!'));
+}
+
+const Settings = ({ navigation }) => {
     return (
         <View style={styles.container}>
-                <SectionList
-                    sections={data}
-                    ItemSeparatorComponent={({ index }) => <View key={index} style={styles.separator} />}
-                    SectionSeparatorComponent={({ index }) => <View key={index} style={styles.separator} />}
-                    renderItem={({ item }) => <ListItem item={item}
-                        onPress={() => this.props.navigation.navigate(item.page)} />}
-                    renderSectionHeader={({ section }) => <Text style={styles.sectionHeader}>{section.title}</Text>}
-                    keyExtractor={(item, index) => index}
-                    ListFooterComponent={() => {
-                        return (
-                            <View style={{ padding: 30 }}>
-                                <Button icon="logout" mode="contained">Logout</Button>
-                            </View>
-                        )
-                    }}
-                />
-            </View>
+            <SectionList
+                sections={data}
+                ItemSeparatorComponent={({ index }) => <View key={index} style={styles.separator} />}
+                SectionSeparatorComponent={({ index }) => <View key={index} style={styles.separator} />}
+                renderItem={({ item }) => <ListItem item={item}
+                    onPress={() => navigation.navigate(item.page)} />}
+                renderSectionHeader={({ section }) => <Text style={styles.sectionHeader}>{section.title}</Text>}
+                keyExtractor={(item, index) => index}
+                ListFooterComponent={() => {
+                    return (
+                        <View style={{ padding: 30 }}>
+                            <Button
+                                icon="logout"
+                                mode="contained"
+                                onPress={signout}>Logout</Button>
+                        </View>
+                    )
+                }}
+            />
+        </View>
     );
 }
 

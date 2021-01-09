@@ -42,6 +42,7 @@ const SettingsStackNavigator = () => {
   return (
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name="Settings" component={Settings} />
+      <Stack.Screen name="UserProfile" component={Profile} />
     </Stack.Navigator>
   );
 }
