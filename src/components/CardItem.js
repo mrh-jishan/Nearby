@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { theme } from '../core/theme';
 
 const fullWidth = Dimensions.get('window').width;
+const fullHeight = Dimensions.get('window').height;
 
 const CardItem = () => {
     return (
@@ -34,25 +35,25 @@ const CardItem = () => {
             {/* ACTIONS */}
             <View style={styles.cardAction}>
 
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.miniButton}>
                     <Text style={styles.star}>
                         <Icon name="star" size={30} />
                     </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} onPress={() => onPressLeft()}>
+                <TouchableOpacity style={styles.miniButton} onPress={() => onPressLeft()}>
                     <Text style={styles.like}>
                         <Icon name="thumbs-up" size={30} />
                     </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button} onPress={() => onPressRight()} >
+                <TouchableOpacity style={styles.miniButton} onPress={() => onPressRight()} >
                     <Text style={styles.dislike}>
                         <Icon name="thumbs-down" size={30} />
                     </Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity style={styles.miniButton}>
                     <Text style={styles.flash}>
                         <Icon name="flash" size={30} />
                     </Text>
@@ -72,6 +73,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.05,
         shadowRadius: 10,
         shadowColor: theme.colors.black,
+        height: fullHeight - 95,
         shadowOffset: { height: 0, width: 0 }
     },
     imageStyle: {
@@ -113,18 +115,18 @@ const styles = StyleSheet.create({
         color: theme.colors.dark_gray,
         textAlign: "center"
     },
-    button: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        backgroundColor: theme.colors.white,
-        marginHorizontal: 7,
-        alignItems: "center",
-        justifyContent: "center",
-        shadowOpacity: 0.15,
-        shadowRadius: 20,
-        shadowColor: theme.colors.dark_gray,
-        shadowOffset: { height: 10, width: 0 }
+    miniButton: {
+        width: 40,
+		height: 40,
+		borderRadius: 30,
+		backgroundColor: theme.colors.white,
+		marginHorizontal: 7,
+		alignItems: "center",
+		justifyContent: "center",
+		shadowOpacity: 0.15,
+		shadowRadius: 20,
+		shadowColor: theme.colors.dark_gray,
+		shadowOffset: { height: 10, width: 0 }
     },
     matchesText: {
         color: theme.colors.white
@@ -162,6 +164,5 @@ const styles = StyleSheet.create({
         color: theme.colors.flash_action
     },
 });
-
 
 export default CardItem;

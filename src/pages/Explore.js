@@ -47,7 +47,6 @@ const Explore = ({ navigation }) => {
         onSwipedAll={onSwipedAllCards}
         stackSize={5}
         stackSeparation={0}
-        animateCardOpacity
         swipeBackCard
         backgroundColor={theme.colors.gray}
       >

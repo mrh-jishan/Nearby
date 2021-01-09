@@ -1,6 +1,7 @@
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { theme } from '../core/theme';
 import Chat from '../pages/Chat';
 import Explore from '../pages/Explore';
 import Settings from '../pages/Settings';
@@ -11,13 +12,16 @@ const UserStack = () => {
   return (
     <Tab.Navigator
       initialRouteName="Explore"
-      activeColor="#f0edf6"
+      activeColor={theme.colors.white}
       // inactiveColor="#3e2465"
-      barStyle={{ backgroundColor: '#694fad' }}
+      barStyle={{ backgroundColor: theme.colors.primary }}
       tabBarOptions={{
-        labelStyle: { fontSize: 12 },
-        tabStyle: { width: 100 },
-        style: { backgroundColor: 'powderblue' },
+        labelStyle: {
+          fontSize: 12
+        },
+        tabStyle: {
+          width: 100
+        },
       }}
     >
       <Tab.Screen name="Explore" component={Explore}
