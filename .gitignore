@@ -57,3 +57,6 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+.env
+nearby-6fad5-c901d03f3b30.json
