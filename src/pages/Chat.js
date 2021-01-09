@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dimensions, FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Message from '../components/Message';
+import Avatar from '../components/Avatar';
 import { theme } from '../core/theme.js';
 
 const DIMENSION_WIDTH = Dimensions.get("window").width;
@@ -45,8 +45,8 @@ const Chat = ({ navigation }) => {
                     </View>)}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => (
-                        <TouchableOpacity>
-                            <Message
+                        <TouchableOpacity onPress={()=> navigation.navigate('Message')}>
+                            <Avatar
                                 image={item.image}
                                 name={item.name}
                                 lastMessage={item.message}

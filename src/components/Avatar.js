@@ -4,7 +4,7 @@ import { theme } from '../core/theme';
 
 const DIMENSION_WIDTH = Dimensions.get("window").width;
 
-const Message = ({ image, lastMessage, name }) => {
+const Avatar = ({ image, lastMessage, name }) => {
     return (
         <View style={styles.containerMessage}>
             <Image source={image} style={styles.avatar} />
@@ -38,4 +38,4 @@ const styles = StyleSheet.create({
         paddingTop: 5
     },
 })
-export default Message;
+export default Avatar;
