@@ -1,10 +1,12 @@
+import Geolocation from '@react-native-community/geolocation';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Header from '../components/Header';
 import Logo from '../components/Logo';
 import Paragraph from '../components/Paragraph';
-import auth from '@react-native-firebase/auth';
 
 const webClientId = '215704965807-o654olrarrlo3s21unjt5jgutvm5p8na.apps.googleusercontent.com'
 
@@ -24,18 +26,33 @@ const Home = ({ navigation }) => {
     const [isSigninInProgress, setIsSigninInProgress] = useState(false);
 
     const signIn = async () => {
-    
+
         try {
             await GoogleSignin.hasPlayServices();
             const { idToken } = await GoogleSignin.signIn();
 
             // Create a Google credential with the token
             const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-          
+
             // Sign-in the user with the credential
-           const userInfo = await  auth().signInWithCredential(googleCredential);
-        
-            console.log('userInfo: ', userInfo);
+            const {user} = await auth().signInWithCredential(googleCredential);
+
+            Geolocation.getCurrentPosition(({coords}) => {
+                firestore()
+                    .collection('users')
+                    .doc(user.uid)
+                    .update({ 
+                        latitude: coords.latitude,
+                        longitude: coords.longitude
+                     })
+                    .then(() => {
+                        console.log('User updated!');
+                    }).catch(err => {
+                        console.log('error updating: ', err);
+                    });
+            }, error => {
+                console.log('error geo location: ', error);
+            });
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 // user cancelled the login flow
