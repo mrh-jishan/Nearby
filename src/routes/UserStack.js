@@ -33,6 +33,8 @@ const ExploreStackNavigator = () => {
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name="Explore" component={Explore} />
       <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="Message" component={Message} />
+      <Stack.Screen name="Chat" component={Chat} />
     </Stack.Navigator>
   );
 }
