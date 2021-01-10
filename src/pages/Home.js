@@ -1,16 +1,18 @@
-import Geolocation from '@react-native-community/geolocation';
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Header from '../components/Header';
 import Logo from '../components/Logo';
 import Paragraph from '../components/Paragraph';
+import { CoordsContext } from './../CoordsProvider';
 
 const webClientId = '215704965807-o654olrarrlo3s21unjt5jgutvm5p8na.apps.googleusercontent.com'
 
 const Home = ({ navigation }) => {
+
+    const coords = useContext(CoordsContext);
 
     useEffect(() => {
         GoogleSignin.configure({
@@ -35,24 +37,23 @@ const Home = ({ navigation }) => {
             const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
             // Sign-in the user with the credential
-            const {user} = await auth().signInWithCredential(googleCredential);
+            const { user } = await auth().signInWithCredential(googleCredential);
 
-            Geolocation.getCurrentPosition(({coords}) => {
-                firestore()
-                    .collection('users')
-                    .doc(user.uid)
-                    .update({ 
-                        latitude: coords.latitude,
-                        longitude: coords.longitude
-                     })
-                    .then(() => {
-                        console.log('User updated!');
-                    }).catch(err => {
-                        console.log('error updating: ', err);
-                    });
-            }, error => {
-                console.log('error geo location: ', error);
-            });
+            console.log('coords in home: ', coords);
+
+            firestore()
+                .collection('users')
+                .doc(user.uid)
+                .update({
+                    latitude: coords.latitude,
+                    longitude: coords.longitude
+                })
+                .then(() => {
+                    console.log('User updated!');
+                }).catch(err => {
+                    console.log('error updating: ', err);
+                });
+
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 // user cancelled the login flow

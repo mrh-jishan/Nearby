@@ -5,11 +5,9 @@ import Routes from './routes/index';
 
 const App = () => {
     return (
-        // <Provider store={store}>
         <PaperProvider theme={theme}>
             <Routes />
         </PaperProvider>
-        //   </Provider>
     )
 }
 

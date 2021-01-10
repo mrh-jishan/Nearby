@@ -1,10 +1,11 @@
 import auth from '@react-native-firebase/auth';
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, Text } from 'react-native';
-import 'react-native-gesture-handler';
+import { Text, View } from 'react-native';
 import AuthStack from './AuthStack';
+import { CoordsProvider } from './../CoordsProvider';
 import UserStack from './UserStack';
+
 
 const Routes = () => {
     const [initializing, setInitializing] = useState(true);
@@ -28,18 +29,12 @@ const Routes = () => {
         );
     }
 
-    if (!user) {
-        return (
-            <NavigationContainer>
-                <AuthStack />
-            </NavigationContainer>
-        );
-    }
-
     return (
-        <NavigationContainer>
-            <UserStack />
-        </NavigationContainer>
+        <CoordsProvider>
+            <NavigationContainer>
+                {user ? <UserStack /> : <AuthStack />}
+            </NavigationContainer>
+        </CoordsProvider>
     );
 }
 
