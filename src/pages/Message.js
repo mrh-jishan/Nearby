@@ -2,6 +2,7 @@ import firestore from '@react-native-firebase/firestore';
 import React, { useEffect } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import auth from '@react-native-firebase/auth';
 
 
 const data = [
@@ -27,6 +28,8 @@ const renderDate = (date) => {
 const Message = ({ route, navigation }) => {
 
     const { id } = route.params;
+
+    
 
     useEffect(() => {
         firestore().collection('users').doc(id).get().then(res => {

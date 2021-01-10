@@ -1,7 +1,9 @@
-import React from 'react';
+import auth from '@react-native-firebase/auth';
+import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Avatar from '../components/Avatar';
 import { theme } from '../core/theme.js';
+import firestore from '@react-native-firebase/firestore';
 
 const DIMENSION_WIDTH = Dimensions.get("window").width;
 const DIMENSION_HEIGHT = Dimensions.get("window").height;
@@ -32,6 +34,29 @@ const data = [
 ]
 
 const Chat = ({ navigation }) => {
+
+
+  const [users, setUsers] =  useState([])
+
+    useEffect(() => {
+        const from = auth().currentUser.uid;
+
+        firestore().collection('messages').where('from', '==', from).get().then(res=>{
+            res.forEach(user=>{
+                console.log('messages from me: ', user.data());
+                setUsers([...users, user.data()])
+            })
+        })
+
+        firestore().collection('messages').where('to', '==', from).get().then(res=>{
+            res.forEach(user=>{
+                console.log('messages from me: ', user.data());
+                setUsers([...users, user.data()])
+            })
+        })
+
+    }, [])
+
     return (
         <ImageBackground
             source={require('../assets/background_dot.png')}
@@ -39,7 +64,7 @@ const Chat = ({ navigation }) => {
         >
             <View style={styles.containerMessages}>
                 <FlatList
-                    data={data}
+                    data={users}
                     ListHeaderComponent={() => (
                         <View style={styles.top}>
                             <View>
@@ -52,7 +77,7 @@ const Chat = ({ navigation }) => {
                     SectionSeparatorComponent={({ index }) => <View key={index} style={styles.separator} />}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => (
-                        <TouchableOpacity onPress={() => navigation.navigate('Message')}>
+                        <TouchableOpacity onPress={() => navigation.navigate('Message', {id: item.to})}>
                             <Avatar
                                 image={item.image}
                                 name={item.name}
