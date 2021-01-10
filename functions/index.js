@@ -14,15 +14,12 @@ const GeoFirestore = geofirestore.initializeApp(firestore);
 const geocollection = GeoFirestore.collection('users');
 
 exports.createUser = functions.https.onCall((data, context) => {
-    const { latitude, longitude } = data.coords;
-    const { user } = data;
 
-    console.debug('user: ', user);
-    console.debug('data: ', data);
+    const { user, coords } = data;
 
     return geocollection.doc(user.uid).set({
         ...user,
-        coordinates: new admin.firestore.GeoPoint(latitude, longitude),
+        coordinates: new admin.firestore.GeoPoint(coords.latitude, coords.longitude),
     }).then(res => {
         return res;
     }).catch(err => {

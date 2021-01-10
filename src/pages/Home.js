@@ -11,6 +11,7 @@ import { CoordsContext } from './../CoordsProvider';
 const Home = ({ navigation }) => {
 
     const coords = useContext(CoordsContext);
+    
     const [isSigninInProgress, setIsSigninInProgress] = useState(false);
 
     const signIn = async () => {

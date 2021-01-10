@@ -3,7 +3,6 @@ import auth from '@react-native-firebase/auth';
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { Text, View } from 'react-native';
-import { CoordsProvider } from './../CoordsProvider';
 import AuthStack from './AuthStack';
 import UserStack from './UserStack';
 
@@ -12,11 +11,6 @@ const webClientId = '215704965807-o654olrarrlo3s21unjt5jgutvm5p8na.apps.googleus
 const Routes = () => {
     const [initializing, setInitializing] = useState(true);
     const [user, setUser] = useState();
-
-    const onAuthStateChanged = (user) => {
-        setUser(user);
-        if (initializing) setInitializing(false);
-    }
 
     useEffect(() => {
         GoogleSignin.configure({
@@ -29,12 +23,17 @@ const Routes = () => {
         });
     }, [webClientId])
 
+    function onAuthStateChanged(user) {
+        setUser(user);
+        if (initializing) setInitializing(false);
+    }
+
     useEffect(() => {
         const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-        return subscriber;
+        return subscriber; // unsubscribe on unmount
     }, []);
 
-    if (initializing) {
+    if (initializing && !user) {
         return (
             <View>
                 <Text>Loading</Text>
@@ -43,11 +42,9 @@ const Routes = () => {
     }
 
     return (
-        <CoordsProvider>
-            <NavigationContainer>
-                {user ? <UserStack /> : <AuthStack />}
-            </NavigationContainer>
-        </CoordsProvider>
+        <NavigationContainer>
+            {user ? <UserStack /> : <AuthStack />}
+        </NavigationContainer>
     );
 }
 
