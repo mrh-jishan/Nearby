@@ -37,7 +37,7 @@ const Explore = ({ navigation }) => {
         onSwipedRight={(index) => onSwiped(index)}
         onSwipedTop={(index) => onSwiped(index)}
         onSwipedBottom={(index) => onSwiped(index)}
-        onTapCard={() => navigation.navigate(index)}
+        onTapCard={() => navigation.navigate('Profile')}
         cards={data.cards}
         cardIndex={data.cardIndex}
         cardVerticalMargin={8}
