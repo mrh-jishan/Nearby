@@ -2,34 +2,47 @@ const functions = require('firebase-functions');
 
 // The Firebase Admin SDK to access Firestore.
 const admin = require('firebase-admin');
+
+const geofirestore = require('geofirestore');
+
 admin.initializeApp();
 
-exports.createUser = functions.auth.user().onCreate((user) => {
-    return admin.firestore().collection('users').doc(user.uid)
-        .set({
-            uid: user.uid,
-            displayName: user.displayName,
-            photoURL: user.photoURL,
-            email: user.email,
-            disabled: user.disabled,
-            emailVerified: user.emailVerified,
-            phoneNumber: user.phoneNumber,
-        }).then(res => {
-            console.log('User created result:', res);
-            return res;
-        }).catch(err => {
-            console.log('Error in creating: ', err);
-            return err;
-        });
-});
+const firestore = admin.firestore();
 
+const GeoFirestore = geofirestore.initializeApp(firestore);
 
-exports.deleteUser = functions.auth.user().onDelete((user) => {
-    return admin.firestore().collection('users').doc(user.uid).delete().then(res => {
-        console.log('User deleted result:', res);
+const geocollection = GeoFirestore.collection('users');
+
+exports.createUser = functions.https.onCall((data, context) => {
+    const { latitude, longitude } = data.coords;
+    const { user } = data;
+
+    console.debug('user: ', user);
+    console.debug('data: ', data);
+
+    return geocollection.doc(user.uid).set({
+        ...user,
+        coordinates: new admin.firestore.GeoPoint(latitude, longitude),
+    }).then(res => {
         return res;
     }).catch(err => {
-        console.log('Error in deleting: ', err);
-        return err;
+        throw new functions.https.HttpsError('failed-precondition', 'Ops! Please try again..', err);
+    })
+});
+
+exports.exploreUser = functions.https.onCall((data, context) => {
+
+    const { latitude, longitude } = data;
+
+    // Create a GeoQuery based on a location
+    const query = geocollection.near({
+        center: new admin.firestore.GeoPoint(latitude, longitude),
+        radius: 1000
+    });
+
+    return query.get().then((value) => {
+        return value.docs;
+    }).catch(err => {
+        throw new functions.https.HttpsError('failed-precondition', 'Ops! Please try again..', err);
     });
 });

@@ -1,58 +1,45 @@
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
 import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-import React, { useContext, useEffect, useState } from 'react';
+import functions from '@react-native-firebase/functions';
+import React, { useContext, useState } from 'react';
 import { View } from 'react-native';
 import Header from '../components/Header';
 import Logo from '../components/Logo';
 import Paragraph from '../components/Paragraph';
 import { CoordsContext } from './../CoordsProvider';
 
-const webClientId = '215704965807-o654olrarrlo3s21unjt5jgutvm5p8na.apps.googleusercontent.com'
-
 const Home = ({ navigation }) => {
 
     const coords = useContext(CoordsContext);
-
-    useEffect(() => {
-        GoogleSignin.configure({
-            scopes: [
-                'https://www.googleapis.com/auth/contacts.readonly',
-                'https://www.googleapis.com/auth/user.birthday.read',
-                'https://www.googleapis.com/auth/user.gender.read',
-                'https://www.googleapis.com/auth/user.phonenumbers.read'],
-            webClientId: webClientId
-        });
-    }, [webClientId]);
-
     const [isSigninInProgress, setIsSigninInProgress] = useState(false);
 
     const signIn = async () => {
-
+        setIsSigninInProgress(true);
         try {
-            await GoogleSignin.hasPlayServices();
+            await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
             const { idToken } = await GoogleSignin.signIn();
-
             // Create a Google credential with the token
             const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
             // Sign-in the user with the credential
             const { user } = await auth().signInWithCredential(googleCredential);
-
-            console.log('coords in home: ', coords);
-
-            firestore()
-                .collection('users')
-                .doc(user.uid)
-                .update({
-                    latitude: coords.latitude,
-                    longitude: coords.longitude
-                })
-                .then(() => {
-                    console.log('User updated!');
-                }).catch(err => {
-                    console.log('error updating: ', err);
-                });
+            const body = {
+                coords: coords,
+                user: {
+                    uid: user.uid,
+                    displayName: user.displayName,
+                    photoURL: user.photoURL,
+                    email: user.email,
+                    emailVerified: user.emailVerified,
+                    phoneNumber: user.phoneNumber,
+                },
+            }
+            console.log('body: ', body);
+            functions().httpsCallable('createUser')(body).then(res => {
+                console.log('res create user: ', res);
+            }).catch(err => {
+                console.log('error create user: ', err);
+            })
 
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -64,9 +51,9 @@ const Home = ({ navigation }) => {
             } else {
                 // some other error happened
             }
-            console.log('error: ', error);
+            console.log('error signin: ', error);
         }
-        // navigation.navigate('RegisterScreen');
+        setIsSigninInProgress(false);
     };
 
     return (

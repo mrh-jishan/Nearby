@@ -1,10 +1,15 @@
-import React, { useRef, useState } from 'react';
+import functions from '@react-native-firebase/functions';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { View } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import CardItem from '../components/CardItem';
+import { CoordsContext } from '../CoordsProvider';
 import { theme } from '../core/theme';
 
+
 const Explore = ({ navigation }) => {
+
+  const coords = useContext(CoordsContext);
 
   const [data, setData] = useState({
     cards: [1, 2, 3, 4, 5, 6, 7, 8],
@@ -27,6 +32,16 @@ const Explore = ({ navigation }) => {
     swiper.swipeLeft()
   };
 
+  useEffect(() => {
+    functions()
+      .httpsCallable('exploreUser')(coords)
+      .then(res => {
+        console.log('response function docs: ', res.data);
+      }).catch(err => {
+        console.log('error explore user: ', err);
+      });
+  }, []);
+
   return (
     <View style={{ flex: 1 }}>
       <Swiper
@@ -38,7 +53,7 @@ const Explore = ({ navigation }) => {
         onSwipedRight={() => onSwiped('right')}
         onSwipedTop={() => onSwiped('top')}
         onSwipedBottom={() => onSwiped('bottom')}
-        onTapCard={()=> navigation.navigate('Profile')}
+        onTapCard={() => navigation.navigate('Profile')}
         cards={data.cards}
         cardIndex={data.cardIndex}
         cardVerticalMargin={8}
