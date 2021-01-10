@@ -11,7 +11,7 @@ import { CoordsContext } from './../CoordsProvider';
 const Home = ({ navigation }) => {
 
     const coords = useContext(CoordsContext);
-    
+
     const [isSigninInProgress, setIsSigninInProgress] = useState(false);
 
     const signIn = async () => {
@@ -35,7 +35,6 @@ const Home = ({ navigation }) => {
                     phoneNumber: user.phoneNumber,
                 },
             }
-            console.log('body: ', body);
             functions().httpsCallable('createUser')(body).then(res => {
                 console.log('res create user: ', res);
             }).catch(err => {

@@ -1,6 +1,7 @@
 
 import Geolocation from '@react-native-community/geolocation';
 import React, { createContext, useEffect, useState } from 'react';
+import { BackHandler } from 'react-native';
 
 const CoordsContext = createContext(undefined);
 
@@ -11,9 +12,9 @@ const CoordsProvider = ({ children }) => {
   useEffect(() => {
     Geolocation.getCurrentPosition(({ coords }) => {
       setCoords({ latitude: coords.latitude, longitude: coords.longitude })
-      console.log('coords from routes: ', coords);
     }, error => {
       console.log('error geo location: ', error);
+      BackHandler.exitApp();
     })
   }, []);
 

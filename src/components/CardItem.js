@@ -1,9 +1,32 @@
-import React from 'react';
+import firestore from '@react-native-firebase/firestore';
+import React, { useEffect } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useState } from 'react/cjs/react.development';
 import styles from '../core/styles';
 
-const CardItem = () => {
+const CardItem = ({ user }) => {
+
+  const [ref, setRef]  =  useState(null)
+
+    useEffect(() => {
+        if (user) {
+            const { id } = user;
+            firestore().collection('users').doc(id).get().then(res => {
+                console.log('user response: ', res.data());
+                setRef(res.data());
+            })
+        }
+    }, [user])
+
+    if(!ref){
+        return(
+            <View>
+                <Text>This is no card</Text>
+            </View>
+        )
+    }
+
     return (
         <View style={styles.container}>
             {/* IMAGE */}

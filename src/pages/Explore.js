@@ -1,72 +1,51 @@
+import Geolocation from '@react-native-community/geolocation';
 import functions from '@react-native-firebase/functions';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import CardItem from '../components/CardItem';
-import { CoordsContext } from '../CoordsProvider';
 import { theme } from '../core/theme';
 
-
 const Explore = ({ navigation }) => {
+  const [data, setData] = useState(
+    {
+      cards: [],
+      swipedAllCards: false,
+      cardIndex: 0
+    })
 
-  const coords = useContext(CoordsContext);
-
-  const [data, setData] = useState({
-    cards: [1, 2, 3, 4, 5, 6, 7, 8],
-    swipedAllCards: false,
-    swipeDirection: '',
-    cardIndex: 0
+  const onSwiped = (index) => {
+    console.log(`on swiped ${index}`)
+    console.log('t: ', data.cards[index]);
   }
-  )
-  let swiper = useRef(null);
-
-  const onSwiped = (type) => {
-    console.log(`on swiped ${type}`)
-  }
-
-  const onSwipedAllCards = () => {
-    setData({ ...data, swipedAllCards: true })
-  };
-
-  const swipeLeft = () => {
-    swiper.swipeLeft()
-  };
 
   useEffect(() => {
-    functions()
-      .httpsCallable('exploreUser')(coords)
-      .then(res => {
+    Geolocation.getCurrentPosition(({ coords }) => {
+      functions().httpsCallable('exploreUser')(coords).then(res => {
+        setData({ ...data, cards: res.data })
         console.log('response function docs: ', res.data);
       }).catch(err => {
         console.log('error explore user: ', err);
       });
+    })
   }, []);
 
   return (
     <View style={{ flex: 1 }}>
       <Swiper
-        ref={sw => {
-          swiper = sw
-        }}
-        onSwiped={() => onSwiped('general')}
-        onSwipedLeft={() => onSwiped('left')}
-        onSwipedRight={() => onSwiped('right')}
-        onSwipedTop={() => onSwiped('top')}
-        onSwipedBottom={() => onSwiped('bottom')}
-        onTapCard={() => navigation.navigate('Profile')}
+        onSwipedLeft={(index) => onSwiped(index)}
+        onSwipedRight={(index) => onSwiped(index)}
+        onSwipedTop={(index) => onSwiped(index)}
+        onSwipedBottom={(index) => onSwiped(index)}
+        onTapCard={() => navigation.navigate(index)}
         cards={data.cards}
         cardIndex={data.cardIndex}
         cardVerticalMargin={8}
         cardHorizontalMargin={10}
-        renderCard={CardItem}
-        onSwipedAll={onSwipedAllCards}
-        stackSize={5}
+        renderCard={(user) => <CardItem user={user} />}
+        stackSize={2}
         stackSeparation={0}
-        swipeBackCard
-        backgroundColor={theme.colors.gray}
-      >
-        {/* <Button onPress={() => swiper.swipeBack()} title='Swipe Back' /> */}
-      </Swiper>
+        backgroundColor={theme.colors.gray}/>
     </View>
   )
 }

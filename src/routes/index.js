@@ -35,7 +35,7 @@ const Routes = () => {
 
     if (initializing && !user) {
         return (
-            <View>
+            <View style={{ flex: 1 }}>
                 <Text>Loading</Text>
             </View>
         );
