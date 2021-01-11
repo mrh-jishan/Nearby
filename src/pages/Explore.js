@@ -39,7 +39,7 @@ const Explore = ({ navigation }) => {
       from: from,
       to: to,
       message: `Hi there! Somebody want to know you more...`,
-      timestamp: new Date().toLocaleString(),
+      timestamp: firestore.Timestamp.fromDate(new Date()),
       key: `${from}-${to}`
     })
   }
