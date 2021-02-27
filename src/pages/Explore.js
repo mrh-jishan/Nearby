@@ -1,5 +1,4 @@
-import Geolocation from 'react-native-geolocation-service';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
 import CardItem from '../components/CardItem';
@@ -8,38 +7,44 @@ import { theme } from '../core/theme';
 const Explore = ({ navigation }) => {
   const [data, setData] = useState(
     {
-      cards: [],
+      cards: [{
+        displayName: 'robin-hassan',
+        distance: '10.23',
+        photoURL: 'https://via.placeholder.com/150',
+        description: 'I am good boy with good charecter'
+      },
+      {
+        displayName: 'robin-hassan',
+        distance: '10.23',
+        photoURL: 'https://via.placeholder.com/150',
+        description: 'I am good boy with good charecter'
+      }],
       canSwipe: false,
       cardIndex: 0
     })
 
   const onSwiped = (index, direction) => {
-    if (data.cards.length == index + 1) {
-      setData({ ...data, canSwipe: true })
-    }
+    console.log('index: ', index);
+    // if (data.cards.length == index + 1) {
+    //   setData({ ...data, canSwipe: true })
+    // }
 
-    const to = data.cards[index].id;
-    const from = auth().currentUser.uid;
+    // const to = data.cards[index].id;
+    // const from = auth().currentUser.uid;
 
-    if (direction == 'right') {
-      sentMessage(to, from);
-    }
+    // if (direction == 'right') {
+    //   sentMessage(to, from);
+    // }
 
-    if (direction == 'top') {
-      navigation.navigate('Message', { id: to });
-    }
+    // if (direction == 'top') {
+    //   navigation.navigate('Message', { id: to });
+    // }
   }
 
 
   const sentMessage = (to, from) => {
-   
-  }
 
-  useEffect(() => {
-    // Geolocation.getCurrentPosition(({ coords }) => {
-      
-    // })
-  }, []);
+  }
 
   const visitProfile = () => {
     if (!data.canSwipe) {

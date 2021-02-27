@@ -12,6 +12,7 @@ const CardItem = ({ user }) => {
     useEffect(() => {
         if (user) {
             const { id } = user;
+            setRef(user)
         }
     }, [user])
 
@@ -25,8 +26,8 @@ const CardItem = ({ user }) => {
                 backgroundColor: theme.colors.white,
             }}>
                 <Text style={{
-                     fontSize: 20,
-                     fontWeight: "bold"
+                    fontSize: 20,
+                    fontWeight: "bold"
                 }}>This is no more user to swipe</Text>
             </View>
         )
@@ -37,10 +38,17 @@ const CardItem = ({ user }) => {
             {/* IMAGE */}
             <Image source={{ uri: ref.photoURL }} style={styles.imageStyle} />
 
+            {/* STATUS */}
+            <View style={styles.status}>
+                {/* <View style={status === 'Online' ? styles.online : styles.offline} /> */}
+                <View style={styles.online} />
+                <Text style={styles.statusText}>Online</Text>
+            </View>
+
             {/* MATCHES */}
             <View style={styles.matchesCard}>
                 <Text style={styles.matchesText}>
-                    <Icon name="heart" size={20} /> {user.distance} Mile away
+                    {user.distance} Mile away
                 </Text>
             </View>
 
@@ -48,14 +56,7 @@ const CardItem = ({ user }) => {
             <Text style={styles.userName}>{ref.displayName}</Text>
 
             {/* DESCRIPTION */}
-            {/* <Text style={styles.description}>Description Of User</Text> */}
-
-            {/* STATUS */}
-            <View style={styles.status}>
-                {/* <View style={status === 'Online' ? styles.online : styles.offline} /> */}
-                <View style={styles.online} />
-                <Text style={styles.statusText}>Online</Text>
-            </View>
+            <Text style={styles.description}>{ref.description}</Text>
 
             {/* ACTIONS */}
             <View style={styles.cardAction}>

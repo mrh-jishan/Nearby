@@ -72,7 +72,6 @@ export default StyleSheet.create({
         color: theme.colors.white
     },
     matchesCard: {
-        marginTop: 0,
         backgroundColor: theme.colors.primary,
         paddingVertical: 7,
         paddingHorizontal: 15,

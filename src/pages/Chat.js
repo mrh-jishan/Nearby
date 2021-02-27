@@ -37,7 +37,7 @@ const Chat = ({ navigation }) => {
   const [users, setUsers] =  useState([])
 
     useEffect(() => {
-
+        setUsers(data)
     }, [])
 
     return (

@@ -4,6 +4,7 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { theme } from '../core/theme';
 import Chat from '../pages/Chat';
+import EditProfile from '../pages/EditProfile';
 import Explore from '../pages/Explore';
 import Message from '../pages/Message';
 import Profile from '../pages/Profile';
@@ -34,6 +35,7 @@ const ExploreStackNavigator = () => {
       <Stack.Screen name="Explore" component={Explore} />
       <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen name="Message" component={Message} />
+      <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="Chat" component={Chat} />
     </Stack.Navigator>
   );
@@ -45,6 +47,7 @@ const SettingsStackNavigator = () => {
     <Stack.Navigator screenOptions={screenOptionStyle}>
       <Stack.Screen name="Settings" component={Settings} />
       <Stack.Screen name="UserProfile" component={Profile} />
+      <Stack.Screen name="EditProfile" component={EditProfile} />
     </Stack.Navigator>
   );
 }
