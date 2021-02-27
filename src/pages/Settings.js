@@ -1,5 +1,4 @@
 import { GoogleSignin } from '@react-native-community/google-signin';
-import auth from '@react-native-firebase/auth';
 import React from 'react';
 import { SectionList, StyleSheet, Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
@@ -66,7 +65,6 @@ const data = [
 const Settings = ({ navigation }) => {
 
     const signout = async () => {
-        auth().signOut().then(() => console.log('User signed out!'));
         // await GoogleSignin.revokeAccess();
         await GoogleSignin.signOut();
     }

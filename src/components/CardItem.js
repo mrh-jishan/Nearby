@@ -1,4 +1,3 @@
-import firestore from '@react-native-firebase/firestore';
 import React, { useEffect } from 'react';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -13,10 +12,6 @@ const CardItem = ({ user }) => {
     useEffect(() => {
         if (user) {
             const { id } = user;
-            firestore().collection('users').doc(id).get().then(res => {
-                console.log('user response: ', res.data());
-                setRef(res.data());
-            })
         }
     }, [user])
 

@@ -1,6 +1,4 @@
 import { GoogleSignin, GoogleSigninButton, statusCodes } from '@react-native-community/google-signin';
-import auth from '@react-native-firebase/auth';
-import functions from '@react-native-firebase/functions';
 import React, { useContext, useState } from 'react';
 import { View } from 'react-native';
 import Header from '../components/Header';
@@ -20,10 +18,10 @@ const Home = ({ navigation }) => {
             await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
             const { idToken } = await GoogleSignin.signIn();
             // Create a Google credential with the token
-            const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+            // const googleCredential = auth.GoogleAuthProvider.credential(idToken);
 
             // Sign-in the user with the credential
-            const { user } = await auth().signInWithCredential(googleCredential);
+            // const { user } = await auth().signInWithCredential(googleCredential);
             const body = {
                 coords: coords,
                 user: {
@@ -35,11 +33,11 @@ const Home = ({ navigation }) => {
                     phoneNumber: user.phoneNumber,
                 },
             }
-            functions().httpsCallable('createUser')(body).then(res => {
-                console.log('res create user: ', res);
-            }).catch(err => {
-                console.log('error create user: ', err);
-            })
+            // functions().httpsCallable('createUser')(body).then(res => {
+            //     console.log('res create user: ', res);
+            // }).catch(err => {
+            //     console.log('error create user: ', err);
+            // })
 
         } catch (error) {
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {

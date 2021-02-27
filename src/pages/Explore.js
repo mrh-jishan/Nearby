@@ -1,7 +1,4 @@
-import Geolocation from '@react-native-community/geolocation';
-import auth from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
-import functions from '@react-native-firebase/functions';
+import Geolocation from 'react-native-geolocation-service';
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
@@ -35,24 +32,13 @@ const Explore = ({ navigation }) => {
 
 
   const sentMessage = (to, from) => {
-    firestore().collection('messages').add({
-      from: from,
-      to: to,
-      message: `Hi there! Somebody want to know you more...`,
-      timestamp: firestore.Timestamp.fromDate(new Date()),
-      key: `${from}-${to}`
-    })
+   
   }
 
   useEffect(() => {
-    Geolocation.getCurrentPosition(({ coords }) => {
-      functions().httpsCallable('exploreUser')(coords).then(res => {
-        setData({ ...data, cards: res.data })
-        console.log('response function docs: ', res.data);
-      }).catch(err => {
-        console.log('error explore user: ', err);
-      });
-    })
+    // Geolocation.getCurrentPosition(({ coords }) => {
+      
+    // })
   }, []);
 
   const visitProfile = () => {
