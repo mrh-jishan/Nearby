@@ -1,11 +1,11 @@
-import { GoogleSigninButton } from '@react-native-community/google-signin';
+import { GoogleSignin, GoogleSigninButton } from '@react-native-community/google-signin';
 import React, { useContext, useState } from 'react';
 import { View } from 'react-native';
 import Header from '../components/Header';
 import Logo from '../components/Logo';
 import Paragraph from '../components/Paragraph';
-import { POST } from './../api';
 import { CoordsContext } from './../CoordsProvider';
+import { POST } from './../store/api';
 
 const Home = ({ navigation }) => {
 
@@ -14,22 +14,25 @@ const Home = ({ navigation }) => {
     const [isSigninInProgress, setIsSigninInProgress] = useState(false);
 
     const signIn = async () => {
-        POST('/sessions',
-            { password: "password", email: "rrobinhassan@gmall.com", provider: "Basic", })
-            .then(res => {
-                console.log('res basic: ', res);
-            }).catch(err => {
-                console.log('err basic: ', err);
-            })
-        // setIsSigninInProgress(true);
-        // try {
-        //     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-        //     const { idToken } = await GoogleSignin.signIn();
-        //     console.log('idToken: ', idToken);
-        // } catch (error) {
-        //     console.log('error signin: ', error);
-        // }
-        // setIsSigninInProgress(false);
+        setIsSigninInProgress(true);
+        try {
+            await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+            const { idToken } = await GoogleSignin.signIn();
+            console.log('idToken: ', idToken);
+            POST('/google_auth',
+                {
+                    token: idToken,
+                    "latitude": 1.3543642266057772,
+        "longitude": 103.93365591197491,
+                }).then(res => {
+                    console.log('res basic: ', res);
+                }).catch(err => {
+                    console.log('err basic: ', err);
+                })
+        } catch (error) {
+            console.log('error signin: ', error);
+        }
+        setIsSigninInProgress(false);
     };
 
     return (
