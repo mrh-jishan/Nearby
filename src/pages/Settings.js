@@ -118,14 +118,8 @@ const styles = StyleSheet.create({
     },
 });
 
-
-
 const mapDispatchToProps = dispatch => ({
     logoutAction: () => dispatch(logoutAction())
 });
 
-const mapStateToProps = ({ coords }) => ({
-    coords: coords
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Settings);
+export default connect(null, mapDispatchToProps)(Settings);

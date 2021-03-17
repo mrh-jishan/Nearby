@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Dimensions, FlatList, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import Avatar from '../components/Avatar';
+import { Avatar } from 'react-native-paper';
 import { theme } from '../core/theme.js';
 
 const DIMENSION_WIDTH = Dimensions.get("window").width;
@@ -34,7 +34,7 @@ const data = [
 const Chat = ({ navigation }) => {
 
 
-  const [users, setUsers] =  useState([])
+    const [users, setUsers] = useState([])
 
     useEffect(() => {
         setUsers(data)
@@ -60,12 +60,11 @@ const Chat = ({ navigation }) => {
                     SectionSeparatorComponent={({ index }) => <View key={index} style={styles.separator} />}
                     keyExtractor={(item, index) => index.toString()}
                     renderItem={({ item }) => (
-                        <TouchableOpacity onPress={() => navigation.navigate('Message', {id: item.to})}>
-                            <Avatar
-                                image={item.image}
-                                name={item.name}
-                                lastMessage={item.message}
-                            />
+                        <TouchableOpacity onPress={() => navigation.navigate('Message', { id: item.to })}>
+                            <View style={styles.messageContainer}>
+                                <Avatar.Text size={40} style={styles.avatar} label="XD" />
+                                <Text>{item.name}</Text>
+                            </View>
                         </TouchableOpacity>
                     )}
                 />
@@ -76,6 +75,24 @@ const Chat = ({ navigation }) => {
 
 
 const styles = StyleSheet.create({
+    messageContainer: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "flex-start",
+        flexDirection: "row",
+        paddingHorizontal: 10,
+        width: DIMENSION_WIDTH - 100
+    },
+    avatar: {
+        borderRadius: 30,
+        marginRight: 20,
+        marginVertical: 15
+    },
+    message: {
+        color: theme.colors.gray,
+        fontSize: 12,
+        paddingTop: 5
+    },
     containerMessages: {
         justifyContent: "space-between",
         flex: 1,
