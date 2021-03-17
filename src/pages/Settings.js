@@ -2,6 +2,8 @@ import { GoogleSignin } from '@react-native-community/google-signin';
 import React from 'react';
 import { SectionList, StyleSheet, Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
+import { connect } from 'react-redux';
+import { logoutAction } from '../store/actions/authAction';
 import ListItem from './../components/ListItem';
 
 const data = [
@@ -62,10 +64,11 @@ const data = [
     },
 ]
 
-const Settings = ({ navigation }) => {
+const Settings = ({ navigation ,logoutAction}) => {
 
     const signout = async () => {
-        // await GoogleSignin.revokeAccess();
+        logoutAction()
+        await GoogleSignin.revokeAccess();
         await GoogleSignin.signOut();
     }
 
@@ -117,4 +120,12 @@ const styles = StyleSheet.create({
 
 
 
-export default Settings;
+const mapDispatchToProps = dispatch => ({
+    logoutAction: () => dispatch(logoutAction())
+});
+
+const mapStateToProps = ({ coords }) => ({
+    coords: coords
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);
