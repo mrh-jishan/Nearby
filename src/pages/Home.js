@@ -1,15 +1,14 @@
 import { GoogleSignin, GoogleSigninButton } from '@react-native-community/google-signin';
-import React, { useContext, useState } from 'react';
-import { View } from 'react-native';
+import React, { useState } from 'react';
+import { Alert, View } from 'react-native';
+import { connect } from 'react-redux';
 import Header from '../components/Header';
 import Logo from '../components/Logo';
 import Paragraph from '../components/Paragraph';
-import { CoordsContext } from './../CoordsProvider';
-import { POST } from './../store/api';
+import { successLogin } from '../store/actions/authAction';
+import { googleAuth } from '../store/api';
 
-const Home = ({ navigation }) => {
-
-    const coords = useContext(CoordsContext);
+const Home = ({ navigation, coords, successUser }) => {
 
     const [isSigninInProgress, setIsSigninInProgress] = useState(false);
 
@@ -18,19 +17,25 @@ const Home = ({ navigation }) => {
         try {
             await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
             const { idToken } = await GoogleSignin.signIn();
-            console.log('idToken: ', idToken);
-            POST('/google_auth',
-                {
-                    token: idToken,
-                    "latitude": 1.3543642266057772,
-        "longitude": 103.93365591197491,
-                }).then(res => {
-                    console.log('res basic: ', res);
+            googleAuth({ token: idToken, coords })
+                .then(res => {
+                    const { token, user } = res.data;
+                    successUser(token, user)
                 }).catch(err => {
-                    console.log('err basic: ', err);
+                    Alert.alert("Message", "Something wrong happen! Please try again...",
+                        [
+                            { text: "OK" }
+                        ],
+                        { cancelable: false }
+                    );
                 })
         } catch (error) {
-            console.log('error signin: ', error);
+            Alert.alert("Message", "Please allow google permission...",
+                [
+                    { text: "OK" }
+                ],
+                { cancelable: false }
+            );
         }
         setIsSigninInProgress(false);
     };
@@ -56,4 +61,14 @@ const Home = ({ navigation }) => {
 }
 
 
-export default Home
+const mapDispatchToProps = dispatch => ({
+    successUser: (user, token) => dispatch(successLogin(user, token))
+});
+
+const mapStateToProps = ({ coords }) => ({
+    coords: coords
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
+
+

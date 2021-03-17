@@ -1,12 +1,12 @@
-import { call, select, takeEvery, put } from 'redux-saga/effects';
-import { successLogin } from '../actions/auth';
+import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { successLogin } from '../actions/authAction';
 import { LOGIN } from '../constants';
-import { getLocalStorage, saveLocalStorage, signOut } from '../services/api';
+import { getData, storeData } from './../api';
 
 
 function* loadTokenSaga() {
-    const storage = yield call(getLocalStorage)
-    if(storage){
+    const storage = yield call(getData)
+    if (storage) {
         yield put(successLogin(storage.user, storage.token))
     }
 }
@@ -14,7 +14,7 @@ function* loadTokenSaga() {
 
 function* authorizeSaga() {
     const { user, token } = yield select(state => state.auth);
-    yield call(saveLocalStorage, { user: user, token: token })
+    yield call(storeData, { user: user, token: token })
 }
 
 

@@ -1,16 +1,10 @@
 import { combineReducers } from 'redux';
+import coordsReducer from './coordsReducer';
 import authReducer from './authReducer';
-import collectionsReducer from './collectionsReducer';
-import restaurantReducer from './restaurantReducer';
-import invitationsReducer from './invitationsReducer';
-import collaborateReducer from './collaborateReducer';
 
 const rootReducer = combineReducers({
+    coords: coordsReducer,
     auth: authReducer,
-    restaurants: restaurantReducer,
-    collections: collectionsReducer,
-    invitations: invitationsReducer,
-    collaborates: collaborateReducer
 });
 
 export default rootReducer;

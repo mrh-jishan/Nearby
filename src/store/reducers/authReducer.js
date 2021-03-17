@@ -2,36 +2,26 @@ import { LOGIN } from "../constants";
 
 const initState = {
     error: null,
-    isLoggedIn: false,
-    isloading: false,
+    isLoggedin: false,
     user: {},
-    token: null,
+    token: null
 }
 
 const authReducer = (state = initState, action) => {
     switch (action.type) {
 
-        case LOGIN.INIT_AUTH:
-            return {
-                ...state,
-                user: action.user,
-                token: action.token
-            }
-
         case LOGIN.AUTH_SUCCESS:
             return {
                 ...state,
-                isLoggedIn: true,
+                isLoggedin: true,
                 user: action.user,
                 token: action.token
             }
 
         case LOGIN.LOGOUT:
             return {
-                ...state,
-                isLoggedIn: false,
-                user: {},
-                token: null
+                ...initState,
+                isLoggedin: false,
             }
 
         default:
