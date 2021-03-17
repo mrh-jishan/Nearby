@@ -1,24 +1,23 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import Swiper from 'react-native-deck-swiper';
+import { connect } from 'react-redux';
 import CardItem from '../components/CardItem';
 import { theme } from '../core/theme';
+import { initExplore } from '../store/actions/exploreAction';
 
-const Explore = ({ navigation }) => {
+const Explore = ({ navigation, loadExplore, explore }) => {
+
+  const callExplore = useCallback(() => {
+    loadExplore()
+  }, [loadExplore])
+
+  useEffect(() => {
+    callExplore();
+  }, [callExplore])
+
   const [data, setData] = useState(
     {
-      cards: [{
-        displayName: 'robin-hassan',
-        distance: '10.23',
-        photoURL: 'https://via.placeholder.com/150',
-        description: 'I am good boy with good charecter'
-      },
-      {
-        displayName: 'robin-hassan',
-        distance: '10.23',
-        photoURL: 'https://via.placeholder.com/150',
-        description: 'I am good boy with good charecter'
-      }],
       canSwipe: false,
       cardIndex: 0
     })
@@ -60,7 +59,7 @@ const Explore = ({ navigation }) => {
         onSwipedTop={(index) => onSwiped(index, 'top')}
         onSwipedBottom={visitProfile}
         onTapCard={visitProfile}
-        cards={data.cards}
+        cards={explore}
         cardIndex={data.cardIndex}
         cardVerticalMargin={8}
         cardHorizontalMargin={10}
@@ -76,4 +75,13 @@ const Explore = ({ navigation }) => {
   )
 }
 
-export default Explore;
+
+const mapDispatchToProps = dispatch => ({
+  loadExplore: () => dispatch(initExplore())
+});
+
+const mapStateToProps = ({ explore }) => ({
+  explore: explore.explore
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Explore);

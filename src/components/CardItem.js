@@ -47,13 +47,11 @@ const CardItem = ({ user }) => {
 
             {/* MATCHES */}
             <View style={styles.matchesCard}>
-                <Text style={styles.matchesText}>
-                    {user.distance} Mile away
-                </Text>
+                <Text style={styles.matchesText}> {user.distance.toFixed(2)} Mile away </Text>
             </View>
 
             {/* NAME */}
-            <Text style={styles.userName}>{ref.displayName}</Text>
+            <Text style={styles.userName}>{ref.first_name} - {ref.last_name}</Text>
 
             {/* DESCRIPTION */}
             <Text style={styles.description}>{ref.description}</Text>

@@ -1,6 +1,6 @@
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { call, put, select, take, takeEvery } from 'redux-saga/effects';
 import { successLogin } from '../actions/authAction';
-import { LOGIN } from '../constants';
+import { COORDS, LOGIN } from '../constants';
 import { getData, removeData, storeData } from './../api';
 
 
@@ -23,6 +23,7 @@ function* logoutSaga() {
 
 
 export default function* watchAuth() {
+    yield take(COORDS.COORDS_SUCCESS)
     yield call(loadTokenSaga)
     yield takeEvery(LOGIN.AUTH_SUCCESS, authorizeSaga);
     yield takeEvery(LOGIN.LOGOUT, logoutSaga);

@@ -3,8 +3,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 axios.defaults.baseURL = 'https://aqueous-garden-41429.herokuapp.com'
 
-const GET = async (url) => {
-    const { data } = await axios.get(url).then(res => res).catch(err => err.response);
+const GET = async (url, params = {}, headers = {}) => {
+    const { data } = await axios.get(url, {
+        params: params,
+        headers: headers
+    }).then(res => res)
+        .catch(err => err.response);
     return data;
 }
 
@@ -19,6 +23,17 @@ const googleAuth = async (body) => {
 
 const register = async (body) => {
     return await POST('/auth', body);
+}
+
+const explore = async (params, token) => {
+    const headers = getHeader(token);
+    return await GET('/api/explores', params, headers)
+}
+
+const getHeader = (token) => {
+    return {
+        Authorization: `Bearer ${token}`
+    }
 }
 
 const storeData = async (value) => {
@@ -46,5 +61,5 @@ const removeData = async () => {
         throw Error('Unable to remove data');
     }
 }
-export { getData, storeData, removeData, googleAuth, register };
+export { getData, storeData, removeData, googleAuth, register, explore };
 

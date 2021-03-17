@@ -55,7 +55,6 @@ const Routes = ({ loadCoords, isLoggedin }) => {
 
         if (locationGranted) {
             Geolocation.getCurrentPosition(({ coords }) => {
-                console.log('Coords: ', coords);
                 loadCoords({ latitude: coords.latitude, longitude: coords.longitude })
             }, (error) => {
                 console.log('Error: ', error.code, error.message);

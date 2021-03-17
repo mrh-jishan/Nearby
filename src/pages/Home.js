@@ -20,7 +20,7 @@ const Home = ({ navigation, coords, successUser }) => {
             googleAuth({ token: idToken, coords })
                 .then(res => {
                     const { token, user } = res.data;
-                    successUser(token, user)
+                    successUser(user, token)
                 }).catch(err => {
                     Alert.alert("Message", "Something wrong happen! Please try again...",
                         [
