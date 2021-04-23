@@ -1,26 +1,24 @@
 import { call, put, select, take, takeEvery } from 'redux-saga/effects';
 import { successLogin } from '../actions/authAction';
+import LocalStorage from '../api/localStorage';
 import { COORDS, LOGIN } from '../constants';
-import { getData, removeData, storeData } from './../api';
-
 
 function* loadTokenSaga() {
-    const storage = yield call(getData)
-    if (storage) {
-        yield put(successLogin(storage.user, storage.token))
+    const { user, token } = yield call(LocalStorage.get)
+    if (user || token) {
+        yield put(successLogin(user, token))
     }
 }
 
 function* authorizeSaga() {
     const { user, token } = yield select(state => state.auth);
-    yield call(storeData, { user: user, token: token })
+    yield call(LocalStorage.store, { user: user, token: token })
 }
 
 
 function* logoutSaga() {
-    yield call(removeData)
+    yield call(LocalStorage.remove)
 }
-
 
 export default function* watchAuth() {
     yield take(COORDS.COORDS_SUCCESS)

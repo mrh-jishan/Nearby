@@ -1,65 +1,50 @@
+import LocalStorage from './localStorage';
+
 const axios = require('axios').default
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-axios.defaults.baseURL = 'https://aqueous-garden-41429.herokuapp.com'
+const baseURL = 'https://nearby-api-dev.herokuapp.com'
 
-const GET = async (url, params = {}, headers = {}) => {
-    const { data } = await axios.get(url, {
-        params: params,
-        headers: headers
-    }).then(res => res)
-        .catch(err => err.response);
-    return data;
-}
+const axiosApiInstance = axios.create({ baseURL: baseURL });
 
-const POST = async (url, body) => {
-    const { data } = await axios.post(url, body).then(res => res).catch(err => err.response);
-    return data;
-}
+axiosApiInstance.interceptors.request.use(async config => {
+    console.log('config: ', config);
 
-const googleAuth = async (body) => {
-    return await POST('/google_auth', body);
-}
+    const { token } = await LocalStorage.get();
+    console.log('local storage: ', token);
 
-const register = async (body) => {
-    return await POST('/auth', body);
-}
+    if (token && config.url.includes('/api')) {
+        config.headers = {
+            'Authorization': `Bearer ${token.access_token}`,
+        }
+    }
+    return config;
+},
+    error => {
+        Promise.reject(error.response)
+    });
 
-const explore = async (params, token) => {
-    const headers = getHeader(token);
-    return await GET('/api/explores', params, headers)
-}
+// Response interceptor for API calls
+axiosApiInstance.interceptors.response.use(response => {
+    return response
+}, async (error) => {
+    const originalRequest = error.config;
+    console.log('original request: ', originalRequest);
+    if (error.response.status === 403 && !originalRequest._retry) {
+        // originalRequest._retry = true;
+        // const access_token = await refreshAccessToken();
+        // axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token;
+        return axiosApiInstance(originalRequest);
+    }
+    return Promise.reject(error.response);
+});
 
-const getHeader = (token) => {
+const API = (() => {
     return {
-        Authorization: `Bearer ${token}`
-    }
-}
+        get: (path, options) => axiosApiInstance.get(path, options),
+        delete: (path, param, options) => axiosApiInstance.delete(path, param, options),
+        post: (path, param, options) => axiosApiInstance.post(path, param, options),
+        put: (path, param, options) => axiosApiInstance.put(path, param, options),
+    };
+})();
 
-const storeData = async (value) => {
-    try {
-        const jsonValue = JSON.stringify(value)
-        await AsyncStorage.setItem('@session', jsonValue)
-    } catch (e) {
-        throw Error('Unable to store data');
-    }
-}
-
-const getData = async () => {
-    try {
-        const jsonValue = await AsyncStorage.getItem('@session')
-        return jsonValue != null ? JSON.parse(jsonValue) : null;
-    } catch (e) {
-        throw Error('Unable to get data');
-    }
-}
-
-const removeData = async () => {
-    try {
-        await AsyncStorage.removeItem('@session')
-    } catch (e) {
-        throw Error('Unable to remove data');
-    }
-}
-export { getData, storeData, removeData, googleAuth, register, explore };
-
+export default API;

@@ -45,9 +45,7 @@ const Routes = ({ loadCoords, isLoggedin }) => {
     }, [locationGranted])
 
     useEffect(() => {
-        GoogleSignin.configure({
-            webClientId: webClientId
-        });
+        GoogleSignin.configure({ webClientId: webClientId });
     }, [webClientId])
 
     useEffect(() => {

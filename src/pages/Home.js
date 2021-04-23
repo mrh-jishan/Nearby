@@ -6,7 +6,7 @@ import Header from '../components/Header';
 import Logo from '../components/Logo';
 import Paragraph from '../components/Paragraph';
 import { successLogin } from '../store/actions/authAction';
-import { googleAuth } from '../store/api';
+import { GoogleAuth } from '../store/api/authService';
 
 const Home = ({ navigation, coords, successUser }) => {
 
@@ -17,18 +17,33 @@ const Home = ({ navigation, coords, successUser }) => {
         try {
             await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
             const { idToken } = await GoogleSignin.signIn();
-            googleAuth({ token: idToken, coords })
-                .then(res => {
-                    const { token, user } = res.data;
-                    successUser(user, token)
-                }).catch(err => {
-                    Alert.alert("Message", "Something wrong happen! Please try again...",
-                        [
-                            { text: "OK" }
-                        ],
-                        { cancelable: false }
-                    );
-                })
+            console.log('coords in signin: ', coords);
+            GoogleAuth({ token: idToken, ...coords }).then(res => {
+                console.log('res data: ', res);
+                const { token, user } = res.data;
+                successUser(user, token)
+            }).catch(err => {
+                console.log('err data:', err);
+                Alert.alert("Message", "Something wrong happen! Please try again...",
+                    [
+                        { text: "OK" }
+                    ],
+                    { cancelable: false }
+                );
+            })
+            // googleAuth({ token: idToken, ...coords }).then(res => {
+            //     console.log('res: ', res);
+            //     const { token, user } = res.data;
+            //     successUser(user, token)
+            // }).catch(err => {
+            //     console.log('err: ', err);
+            //     Alert.alert("Message", "Something wrong happen! Please try again...",
+            //         [
+            //             { text: "OK" }
+            //         ],
+            //         { cancelable: false }
+            //     );
+            // })
         } catch (error) {
             Alert.alert("Message", "Please allow google permission...",
                 [
@@ -66,7 +81,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = ({ coords }) => ({
-    coords: coords
+    coords: coords.coords
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

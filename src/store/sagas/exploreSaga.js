@@ -1,13 +1,14 @@
 import { call, put, select, take, takeEvery } from 'redux-saga/effects';
 import { errorExplore, successExplore } from '../actions/exploreAction';
+import { Explore } from '../api/exploreService';
 import { COORDS, EXPLORE } from '../constants';
-import { explore } from './../api';
+// import { explore } from './../api';
 
 function* initLoadExplore() {
     try {
         const { token } = yield select(state => state.auth);
         const { coords } = yield select(state => state.coords);
-        const { data } = yield call(explore, { coords: [coords.latitude, coords.longitude], radius: 500 }, token)
+        const { data } = yield call(Explore, { coords: [coords.latitude, coords.longitude], radius: 500 }, token)
         yield put(successExplore(data))
     } catch (e) {
         yield put(errorExplore('Sorry! Something went wrong...'))
