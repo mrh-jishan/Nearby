@@ -1,4 +1,6 @@
-import { GoogleSignin } from '@react-native-community/google-signin';
+import {
+    GoogleSignin
+} from '@react-native-google-signin/google-signin';
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, BackHandler, PermissionsAndroid } from 'react-native';
@@ -9,6 +11,7 @@ import AuthStack from './AuthStack';
 import UserStack from './UserStack';
 
 const webClientId = '215704965807-o654olrarrlo3s21unjt5jgutvm5p8na.apps.googleusercontent.com'
+
 const rationale = {
     title: "Location Permission",
     message: "App needs access to your location to serve you better.",
@@ -45,7 +48,10 @@ const Routes = ({ loadCoords, isLoggedin }) => {
     }, [locationGranted])
 
     useEffect(() => {
-        GoogleSignin.configure({ webClientId: webClientId });
+        GoogleSignin.configure({
+            webClientId: webClientId,
+            iosClientId: webClientId
+        });
     }, [webClientId])
 
     useEffect(() => {

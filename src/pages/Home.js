@@ -1,4 +1,7 @@
-import { GoogleSignin, GoogleSigninButton } from '@react-native-community/google-signin';
+import {
+    GoogleSignin,
+    GoogleSigninButton
+} from '@react-native-google-signin/google-signin';
 import React, { useState } from 'react';
 import { Alert, View } from 'react-native';
 import { connect } from 'react-redux';

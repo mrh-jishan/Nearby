@@ -1,4 +1,4 @@
-import { GoogleSignin } from '@react-native-community/google-signin';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import React from 'react';
 import { SectionList, StyleSheet, Text, View } from 'react-native';
 import { Button } from 'react-native-paper';
@@ -64,7 +64,7 @@ const data = [
     },
 ]
 
-const Settings = ({ navigation ,logoutAction}) => {
+const Settings = ({ navigation, logoutAction }) => {
 
     const signout = async () => {
         logoutAction()
